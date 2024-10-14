@@ -16,11 +16,49 @@ let polyline // La polyline en cours de construction;
 
 const polylineMachine = createMachine(
     {
-        /** @xstate-layout N4IgpgJg5mDOIC5gF8A0IB2B7CdGgAcsAbATwBkBLDMfEI2SgF0qwzoA9EBaANnVI9eAOgAM4iZMkB2ZGnokK1MMMoRitJAsYs2nRABYATAMQAOAIzCD0gJwXetgwGZezgw9ty5QA */
+        /** @xstate-layout N4IgpgJg5mDOIC5QAcD2AbAngGQJYDswA6XCdMAYgFkB5AVQGUBRAYWwEkWBpAbQAYAuohSpYuAC65U+YSAAeiALQBGACwAaEJiUBWAJxEdAXyOa0WPISIQATgEMA7gSjV6zNp16DZaMZOmyCgiKAEwA7ABsRKohygAcYTqa2ggAzJFEIcamIOY4BMS2js6ujEy0AGpM-EJIuaISUjJ1QTo6IUR8YXHKWcmIIap8JmYY+VZFTvguAEIAgtwMAAoL1d51vo0BLYjKEXyd3b1JWkoRcSP1FgXW9lMuTAByACpMAEo1Pg3+zaBBKnw4kQ9LEEicUjplJc8pZCncSkwGCw5ks1rURH4moElMo9Ac+Kljv0EMpUjpMtkcvhUBA4F9roQvpjtn8lKlBtFQYliSo2oZoWNYSQyGAmVtfvIcalUjz9AKGXDitMxT9sQgIqpDEc+qc0moTCYgA */
         id: "polyLine",
         initial: "idle",
         states : {
             idle: {
+                on: {
+                    MOUSECLICK: {
+                        target: "drawing",
+                        actions: "createLine"
+                    }
+                }
+            },
+
+            drawing: {
+                on: {
+                    MOUSECLICK: {
+                        target: "drawing",
+                        internal: true,
+                        actions: "addPoint"
+                    },
+
+                    MOUSEMOVE: {
+                        target: "drawing",
+                        internal: true,
+                        actions: "setLastPoint"
+                    },
+
+                    BACKSPACE: {
+                        target: "drawing",
+                        internal: true,
+                        actions: "removeLastPoint"
+                    },
+
+                    ENTER: {
+                        target: "idle",
+                        actions: "saveLine"
+                    },
+
+                    ESCAPE: {
+                        target: "idle",
+                        actions: "abandon"
+                    }
+                }
             }
         }
     },
